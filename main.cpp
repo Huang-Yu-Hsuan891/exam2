@@ -25,7 +25,6 @@ InterruptIn btnRecord(USER_BUTTON);
 
 EventQueue queue_gesture(32 * EVENTS_EVENT_SIZE);
 void gesture_capture(Arguments *in, Reply *out);
-
 RPCFunction gestureui(&gesture_capture, "gesture_capture");
 Thread t1_gestureui;
 
@@ -71,6 +70,7 @@ int PredictGesture(float* output) {
 }
 
 int select_angle;
+
 void print(int gesture_index) {
     uLCD.cls();
     uLCD.background_color(WHITE);
@@ -91,6 +91,15 @@ void accelerator_data() {
     int i = 0;
     int16_t pDataXYZ[3] = {0};
     int16_t pDataXYZ1[3] = {0};
+    int16_t pDataXYZ2[3] = {0};
+    int16_t pDataXYZ3[3] = {0};
+    int16_t pDataXYZ4[3] = {0};
+    int16_t pDataXYZ5[3] = {0};
+    int16_t pDataXYZ6[3] = {0};
+    int16_t pDataXYZ7[3] = {0};
+    int16_t pDataXYZ8[3] = {0};
+    int16_t pDataXYZ9[3] = {0};
+    int16_t pDataXYZ10[3] = {0};
     float cosangle;
     float long1;
     float long2;
@@ -155,6 +164,9 @@ void accelerator_data() {
     //return -1;
   }
   error_reporter->Report("Set up successful...\n");
+  BSP_ACCELERO_AccGetXYZ(pDataXYZ);
+  printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
+  ThisThread::sleep_for(1000ms);
   while (true) {
 
     // Attempt to read new data from the accelerometer
@@ -188,10 +200,75 @@ void accelerator_data() {
     }
     select_angle = 30;
     cos_select = 0.866;
-    BSP_ACCELERO_AccGetXYZ(pDataXYZ);
-    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
-    ThisThread::sleep_for(2000ms);
-    while (i<=10) {
+    //BSP_ACCELERO_AccGetXYZ(pDataXYZ);
+    //printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
+    //ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ1);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ1[0], pDataXYZ1[1], pDataXYZ1[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ2);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ2[0], pDataXYZ2[1], pDataXYZ2[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ3);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ3[0], pDataXYZ3[1], pDataXYZ3[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ4);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ4[0], pDataXYZ4[1], pDataXYZ4[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ5);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ5[0], pDataXYZ5[1], pDataXYZ5[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ6);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ6[0], pDataXYZ6[1], pDataXYZ6[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ7);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ7[0], pDataXYZ7[1], pDataXYZ7[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ8);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ8[0], pDataXYZ8[1], pDataXYZ8[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ9);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ9[0], pDataXYZ9[1], pDataXYZ9[2]);
+    ThisThread::sleep_for(100ms);
+    BSP_ACCELERO_AccGetXYZ(pDataXYZ10);
+    printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ10[0], pDataXYZ10[1], pDataXYZ10[2]);
+    ThisThread::sleep_for(100ms);
+
+    int j[10];
+    long1 = sqrt(pDataXYZ[0] * pDataXYZ[0] + pDataXYZ[1] * pDataXYZ[1] + pDataXYZ[2] * pDataXYZ[2]);
+    long2 = sqrt(pDataXYZ1[0] * pDataXYZ1[0] + pDataXYZ1[1] * pDataXYZ1[1] + pDataXYZ1[2] * pDataXYZ1[2]);
+    cosangle = (pDataXYZ[0] * pDataXYZ1[0] + pDataXYZ[1] * pDataXYZ1[1] + pDataXYZ[2] * pDataXYZ1[2]) / (long1 * long2);
+    if (cosangle < cos_select) {
+      success_ang = 1;
+      i++;
+      //mqtt_queue1.call(&publish_message, &client);
+      printf("success_ang = %d\r\n", success_ang);
+      j[i] = success_ang;
+    } else {
+       success_ang = 0; 
+       i++;
+       printf("success_ang = %d\r\n", success_ang);
+       j[i] = success_ang;
+    }
+    ThisThread::sleep_for(100ms);
+    
+    long1 = sqrt(pDataXYZ[0] * pDataXYZ[0] + pDataXYZ[1] * pDataXYZ[1] + pDataXYZ[2] * pDataXYZ[2]);
+    long2 = sqrt(pDataXYZ2[0] * pDataXYZ2[0] + pDataXYZ2[1] * pDataXYZ2[1] + pDataXYZ2[2] * pDataXYZ2[2]);
+    cosangle = (pDataXYZ[0] * pDataXYZ2[0] + pDataXYZ[1] * pDataXYZ2[1] + pDataXYZ[2] * pDataXYZ2[2]) / (long1 * long2);
+    if (cosangle < cos_select) {
+      success_ang = 1;
+      i++;
+      //mqtt_queue1.call(&publish_message, &client);
+      printf("success_ang = %d\r\n", success_ang);
+      j[i] = success_ang;
+    } else {
+       success_ang = 0; 
+       i++;
+       printf("success_ang = %d\r\n", success_ang);
+       j[i] = success_ang;
+    }
+    ThisThread::sleep_for(100ms);
+    /*while (i<=10) {
     BSP_ACCELERO_AccGetXYZ(pDataXYZ1);
     printf("detect Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ1[0], pDataXYZ1[1], pDataXYZ1[2]);
     long1 = sqrt(pDataXYZ[0] * pDataXYZ[0] + pDataXYZ[1] * pDataXYZ[1] + pDataXYZ[2] * pDataXYZ[2]);
@@ -205,10 +282,10 @@ void accelerator_data() {
     else {
       success_ang = 0; 
       i = i;
-    }
+    }*/
     //printf("success_ang = %d\r\n", success_ang);
     //print1(success_ang);
-    ThisThread::sleep_for(200ms);
+    //ThisThread::sleep_for(200ms);
     //if (i>10){break;}
   }
 
@@ -242,6 +319,4 @@ void gesture_capture(Arguments *in, Reply *out) {
     queue_gesture.call(accelerator_data);
     //btnRecord.fall(queue_gesture.event(startRecord));
     //btnRecord.rise(queue_gesture.event(stopRecord));
-
-
 }
