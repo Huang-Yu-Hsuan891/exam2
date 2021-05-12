@@ -203,6 +203,7 @@ void accelerator_data() {
     //BSP_ACCELERO_AccGetXYZ(pDataXYZ);
     //printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ[0], pDataXYZ[1], pDataXYZ[2]);
     //ThisThread::sleep_for(100ms);
+    if (gesture_index == 2) {
     BSP_ACCELERO_AccGetXYZ(pDataXYZ1);
     printf("initial Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ1[0], pDataXYZ1[1], pDataXYZ1[2]);
     ThisThread::sleep_for(100ms);
@@ -251,7 +252,7 @@ void accelerator_data() {
        j[i] = success_ang;
     }
     ThisThread::sleep_for(100ms);
-    
+
     long1 = sqrt(pDataXYZ[0] * pDataXYZ[0] + pDataXYZ[1] * pDataXYZ[1] + pDataXYZ[2] * pDataXYZ[2]);
     long2 = sqrt(pDataXYZ2[0] * pDataXYZ2[0] + pDataXYZ2[1] * pDataXYZ2[1] + pDataXYZ2[2] * pDataXYZ2[2]);
     cosangle = (pDataXYZ[0] * pDataXYZ2[0] + pDataXYZ[1] * pDataXYZ2[1] + pDataXYZ[2] * pDataXYZ2[2]) / (long1 * long2);
@@ -260,7 +261,7 @@ void accelerator_data() {
       i++;
       //mqtt_queue1.call(&publish_message, &client);
       printf("success_ang = %d\r\n", success_ang);
-      j[i] = success_ang;
+       j[i] = success_ang;
     } else {
        success_ang = 0; 
        i++;
@@ -268,6 +269,7 @@ void accelerator_data() {
        j[i] = success_ang;
     }
     ThisThread::sleep_for(100ms);
+    }
     /*while (i<=10) {
     BSP_ACCELERO_AccGetXYZ(pDataXYZ1);
     printf("detect Accelerometer values: (%d, %d, %d)\r\n", pDataXYZ1[0], pDataXYZ1[1], pDataXYZ1[2]);
@@ -288,9 +290,7 @@ void accelerator_data() {
     //ThisThread::sleep_for(200ms);
     //if (i>10){break;}
   }
-
-
-  }
+  //}
 }
 
 int main() {
